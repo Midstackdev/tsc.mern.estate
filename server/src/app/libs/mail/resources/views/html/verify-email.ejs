@@ -1,0 +1,50 @@
+<%- include('../partials/top', {title :'Veriify Email Link'}); %>
+<!-- START CENTERED WHITE CONTAINER -->
+<table role="presentation" class="main">
+
+    <!-- START MAIN CONTENT AREA -->
+    <tr>
+      <td class="wrapper">
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+          <tr>
+            <td>
+              <p>Hi <%= name %>,</p>
+              <p>Verify your email by clicking on the link below:</p>
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
+                <tbody>
+                  <tr>
+                    <td align="center">
+                      <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                        <tbody>
+                          <tr>
+                            <td> <a href="<%= link %>" target="_blank">Verify Email</a> </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p>The link will expire in 15 mins!</p>
+              <small>If you haven't requested email verification, please ignore!</small>
+              <p>Thanks.</p>
+              <p>The Node Genius App.</p>
+              <br/>
+              <hr>
+              <!-- <small>
+                If you are having trouble clicking the "Reset Password Address" button, 
+                copy and paste the URL below into your web browser: 
+                <a href="<%= link %>" target="_blank">
+                  <%= link %>
+                </a>
+              </small> -->
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+
+  <!-- END MAIN CONTENT AREA -->
+  </table>
+  <!-- END CENTERED WHITE CONTAINER -->
+  <%- include('../partials/bottom'); %>
