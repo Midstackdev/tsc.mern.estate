@@ -1,13 +1,21 @@
-import { Home } from './assets/icons';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Home from './pages/Home';
+import Profile from './pages/Profile';
+import About from './pages/About';
+import SignUp from './pages/SignUp';
+import SignIn from './pages/SignIn';
 
 const App = () => {
   return (
-    <div>
-      Hello World{' '}
-      <span>
-        <Home style={{ height: '20px', width: '20px' }} />
-      </span>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/profile" element={<Profile />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
