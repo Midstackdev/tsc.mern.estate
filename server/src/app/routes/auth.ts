@@ -22,5 +22,7 @@ router.post("/password/email", password.sendResetLinkEmail);
 router.post("/password/reset", password.reset);
 router.get("/email/resend", email.resend);
 router.get("/email/resend/:id/:hash", email.verify);
+router.get("/login/:with", login.SignInWith);
+router.get("/login/:with/callback", login.SignInWithCallback);
 
 export default router;

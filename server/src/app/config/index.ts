@@ -42,3 +42,7 @@ export const TWILIO_FROM_NUMBER = process.env.TWILIO_FROM_NUMBER || "";
 export const TWILIO_SERVICE_SID = process.env.TWILIO_SERVICE_SID || "";
 export const TOTP_LABEL = process.env.APP_NAME || "";
 export const TOTP_ISSUER = process.env.TOTP_ISSUER || "";
+export const CLIENT_ID = process.env.CLIENT_ID || "";
+export const CLIENT_SECRET = process.env.CLIENT_SECRET || "";
+export const REDIRECT_URI = process.env.REDIRECT_URI || "";
+export const REDIRECT_URI_SERVER = process.env.REDIRECT_URI_SERVER || "";

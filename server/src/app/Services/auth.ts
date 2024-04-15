@@ -4,7 +4,7 @@ import { Password } from "../Utils/Password";
 import { throwHttpError } from "../libs/utils/errors";
 
 export class AuthService {
-  public async register(data: IUser): Promise<IUser> {
+  public async register(data: IUser): Promise<UserDoc> {
     if (await this.userExists({ email: data.email })) {
       throwHttpError("email already exists");
     }

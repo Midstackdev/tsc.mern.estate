@@ -9,15 +9,19 @@ export class Http {
     try {
       const res = await fetch(url, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-          ...(headers && { ...headers }),
-        },
+        // headers: {
+        //   "Content-Type": "application/json",
+        ...(headers && { headers: { ...headers } }),
+        // },
         ...(body && { body: JSON.stringify(body) }),
         ...(options && { ...options }),
       });
       if (!res.ok) {
-        return Promise.reject(res);
+        return Promise.reject({
+          status: res.status,
+          statusMessage: res.statusText,
+          message: res,
+        });
       }
       const data = await res.json();
       return data;

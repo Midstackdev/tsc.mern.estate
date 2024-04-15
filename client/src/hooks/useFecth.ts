@@ -95,5 +95,5 @@ export const useFetch = (url: string, cached: boolean = false) => {
       cancelRequest = true;
     };
   }, [url, cached]);
-  return { state };
+  return { ...state };
 };
