@@ -1,8 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppError } from '../../types';
 
+type User = {
+  name: string;
+  email: string;
+  picture?: string;
+};
+
 type StateType = {
-  currentUser: object | null;
+  currentUser: User | null;
   error: null | AppError;
   loading: boolean;
 };
@@ -21,7 +27,10 @@ const userSlice = createSlice({
       state.loading = true;
     },
     signInSuccess: (state, action) => {
-      state.currentUser = action.payload;
+      state.currentUser = {
+        ...action.payload.user,
+        token: action.payload.accessToken,
+      };
       state.loading = false;
       state.error = null;
     },

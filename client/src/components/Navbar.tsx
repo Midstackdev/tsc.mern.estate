@@ -1,8 +1,12 @@
 import React from 'react';
 import { SearchIcon } from '../assets/icons';
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 const Navbar = () => {
+  const { currentUser } = useSelector((state: RootState) => state.user);
+
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -31,10 +35,18 @@ const Navbar = () => {
               About
             </li>
           </Link>
-          <Link to={'/sign-in'}>
-            <li className="hidden sm:inline text-slate-700 hover:cursor-pointer">
-              SignIn
-            </li>
+          <Link to={'/profile'}>
+            {currentUser ? (
+              <img
+                src={currentUser?.picture ?? './avatar.png'}
+                className="rounded-full h-7 w-7"
+                alt="profile"
+              />
+            ) : (
+              <li className="hidden sm:inline text-slate-700 hover:cursor-pointer">
+                SignIn
+              </li>
+            )}
           </Link>
         </ul>
       </div>

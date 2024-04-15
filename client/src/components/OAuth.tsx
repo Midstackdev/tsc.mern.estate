@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useFetch } from '../hooks';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { signInSuccess } from '../redux/user/userSlice';
