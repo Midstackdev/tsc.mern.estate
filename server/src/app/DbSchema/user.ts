@@ -12,6 +12,11 @@ import {
   TWO_FACTOR_TYPE_VALUES,
 } from "../Enums";
 
+type Details = {
+  username?: string;
+  picture?: string;
+};
+
 export type IUser = {
   _id?: string;
   name: string;
@@ -28,6 +33,7 @@ export type IUser = {
     };
   };
   role: string;
+  details?: Details;
 };
 
 export type UserDoc = IUser & Document;
@@ -57,6 +63,7 @@ const Settings = new Schema({
 
 const NestedSchema = new Schema({
   username: { type: String },
+  picture: { type: String },
 });
 
 /*
