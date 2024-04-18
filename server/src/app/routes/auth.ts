@@ -4,6 +4,7 @@ import { LoginController } from "../Http/Controllers/Auth/Login";
 import { LogoutController } from "../Http/Controllers/Auth/Logout";
 import { ResetPasswordController } from "../Http/Controllers/Auth/ResetPassword";
 import { VerificationController } from "../Http/Controllers/Auth/Verification";
+import { protect } from "../Http/Middleware/protected";
 
 const router = Router();
 
@@ -15,8 +16,8 @@ const email: VerificationController = new VerificationController();
 
 router.post("/register", register.SignUp);
 router.post("/login", login.SignIn);
-router.post("/logout", logout.SignOut);
-router.post("/refresh", logout.Refresh);
+router.post("/logout", protect, logout.SignOut);
+router.post("/refresh", protect, logout.Refresh);
 router.get("/password/reset", password.sendResetLinkForm);
 router.post("/password/email", password.sendResetLinkEmail);
 router.post("/password/reset", password.reset);

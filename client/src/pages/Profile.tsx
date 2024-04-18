@@ -6,6 +6,9 @@ import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signOutFailure,
+  signOutStart,
+  signOutSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
@@ -127,6 +130,25 @@ const Profile = () => {
     }
   };
 
+  const handleSignout = async () => {
+    try {
+      dispatch(signOutStart());
+      const res = await fetch(`/api/auth/logout`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${currentUser?.token}`,
+        },
+      });
+      const data = await res.json();
+      if (!res.ok) throw data;
+      dispatch(signOutSuccess(data));
+    } catch (error) {
+      dispatch(signOutFailure(error));
+    }
+  };
+
   const showImage = pageData?.picture
     ? pageData?.picture
     : currentUser?.picture
@@ -188,7 +210,9 @@ const Profile = () => {
         <span onClick={handleDelete} className="text-red-700 cursor-pointer">
           Delete Account
         </span>
-        <span className="text-red-700 cursor-pointer">Sign Out</span>
+        <span onClick={handleSignout} className="text-red-700 cursor-pointer">
+          Sign Out
+        </span>
       </div>
       {error && <p className="text-red-500 mt-5">{error.message}</p>}
       {/* {!error && !loading && (
