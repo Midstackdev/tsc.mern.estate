@@ -86,11 +86,26 @@ export class UserController extends Controller {
     }
   }
 
+  //consider a deactivate account with deleted_at
+  // handle owner check with authorize class
   public async destroy(req: Request, res: Response, next: NextFunction) {
     try {
+      if (req.user.id !== req.params.id) {
+        throwCustomError({
+          message: "Invalid user!",
+          status: HttpStatusCode.UNAUTHORIZED,
+        });
+      }
       log.info(`deleting a user with id:`);
-      const user = await User.create(req.body);
-      return super.jsonRes(user, res);
+      await User.deleteById(req.params.id);
+      res.clearCookie("refreshtoken");
+      return super.jsonRes(
+        {
+          message: "User Deleted successfully!",
+          type: "success",
+        },
+        res
+      );
     } catch (error) {
       return next(error);
     }
