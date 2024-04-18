@@ -1,14 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
-import { InputChangeEventHandler } from '../types';
+import { FormEvent, InputChangeEventHandler } from '../types';
+import {
+  updateUserFailure,
+  updateUserStart,
+  updateUserSuccess,
+} from '../redux/user/userSlice';
 
 type PageData = {
   picture?: string;
 };
 
 const Profile = () => {
-  const { currentUser } = useSelector((state: RootState) => state.user);
+  const { currentUser, loading, error } = useSelector(
+    (state: RootState) => state.user
+  );
   const [file, setFile] = useState<File | undefined>(undefined);
   const fileRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<
@@ -16,6 +23,7 @@ const Profile = () => {
   >('initial');
   // const [progress, setProgress] = useState(0);
   const [pageData, setPageData] = useState<PageData>({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (file) {
@@ -60,7 +68,7 @@ const Profile = () => {
       }
     }
   };
-  console.log('---fr----', pageData);
+  console.log('---sts----', status);
 
   const handleFileClick = () => {
     if (fileRef.current) {
@@ -68,9 +76,33 @@ const Profile = () => {
     }
   };
 
-  const handleSelectFIle = (e: InputChangeEventHandler) => {
+  const handleSelectFile = (e: InputChangeEventHandler) => {
     setStatus('initial');
     setFile(e.target?.files?.[0]);
+  };
+
+  const handleChange = (e: InputChangeEventHandler) => {
+    setPageData({ ...pageData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/${currentUser?.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${currentUser?.token}`,
+        },
+        body: JSON.stringify(pageData),
+      });
+      const data = await res.json();
+      if (!res.ok) throw data;
+      dispatch(updateUserSuccess(data));
+    } catch (error) {
+      dispatch(updateUserFailure(error));
+    }
   };
 
   const showImage = pageData?.picture
@@ -82,7 +114,7 @@ const Profile = () => {
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <input
           type="file"
           name=""
@@ -90,7 +122,7 @@ const Profile = () => {
           ref={fileRef}
           hidden
           accept="image/*"
-          onChange={handleSelectFIle}
+          onChange={handleSelectFile}
         />
         <img
           src={showImage}
@@ -102,26 +134,31 @@ const Profile = () => {
           placeholder="name"
           id="name"
           type="text"
+          defaultValue={currentUser?.name}
           className="border p-3 rounded-lg focus:outline-none"
+          onChange={handleChange}
         />
         <input
           placeholder="email"
           id="email"
           type="email"
+          defaultValue={currentUser?.email}
           className="border p-3 rounded-lg focus:outline-none"
+          onChange={handleChange}
         />
         <input
           placeholder="password"
           id="password"
-          type="text"
+          type="password"
           className="border p-3 rounded-lg focus:outline-none"
+          onChange={handleChange}
         />
         <button
           type="submit"
-          // disabled={loading}
+          disabled={loading}
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
-          {status === 'uploading' ? 'loading...' : 'Update'}
+          {loading ? 'loading...' : 'Update'}
         </button>
         {/* {progress > 0 && <p>Upload Progress: {progress}%</p>} */}
       </form>
@@ -129,6 +166,10 @@ const Profile = () => {
         <span className="text-red-700 cursor-pointer">Delete Account</span>
         <span className="text-red-700 cursor-pointer">Sign Out</span>
       </div>
+      {error && <p className="text-red-500 mt-5">{error.message}</p>}
+      {/* {!error && !loading && (
+        <p className="text-green-500 mt-5">Updated successfully</p>
+      )} */}
     </div>
   );
 };

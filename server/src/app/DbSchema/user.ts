@@ -61,10 +61,13 @@ const Settings = new Schema({
   }),
 });
 
-const NestedSchema = new Schema({
-  username: { type: String },
-  picture: { type: String },
-});
+const NestedSchema = new Schema(
+  {
+    username: { type: String },
+    picture: { type: String },
+  },
+  { id: false, _id: false, timestamps: false }
+);
 
 /*
  * Create the schmema that will reflect the MongoDB collection

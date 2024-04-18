@@ -24,6 +24,7 @@ router.get(
 router.post("/", controller.store);
 router.post("/avatar", upload, controller.avatar);
 router.get("/:id", protect, controller.get);
+router.put("/:id", protect, controller.update);
 router.get("/otp/send", protect, otp.sendCode);
 router.post("/otp/verify", protect, otp.verifyCode);
 router.post("/totp/enable", protect, totp.enable);

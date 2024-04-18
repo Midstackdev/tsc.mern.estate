@@ -37,14 +37,21 @@ export class BaseModel {
       : this.mongooseModel.find(query).exec();
   }
 
-  updateById<T>(id: string, document: any, populate?: IPopulate): Promise<T> {
+  updateById<T>(
+    id: string,
+    document: any,
+    select?: string,
+    populate?: IPopulate
+  ): Promise<T> {
     return populate
       ? this.mongooseModel
           .findByIdAndUpdate(id, document, this.returnNew)
           .populate(populate)
+          .select(`${select}`)
           .exec()
       : this.mongooseModel
           .findByIdAndUpdate(id, document, this.returnNew)
+          .select(`${select}`)
           .exec();
   }
 

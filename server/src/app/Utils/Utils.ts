@@ -57,7 +57,7 @@ export class Jwt {
   }
 
   public static createAccessToken(data: any) {
-    return this.generateToken(data, ACCESS_TOKEN_SECRET, 15 * 60);
+    return this.generateToken(data, ACCESS_TOKEN_SECRET, 60 * 60);
   }
 
   public static createRefreshToken(data: any) {

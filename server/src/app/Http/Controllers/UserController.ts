@@ -5,6 +5,9 @@ import { log } from "../../libs/logger";
 import { cache } from "../../libs/cache/redis";
 import { cloudinary } from "../../Integrations/Storage/cloudinary";
 import { UserResource } from "../Resource/UserResource";
+import { throwCustomError } from "../../libs/utils/errors";
+import HttpStatusCode from "../../Enums/HttpStatusCode";
+import { Password } from "../../Utils/Password";
 
 export class UserController extends Controller {
   public constructor() {
@@ -55,9 +58,28 @@ export class UserController extends Controller {
   }
 
   public async update(req: Request, res: Response, next: NextFunction) {
+    //check form validation
     try {
+      if (req.user.id !== req.params.id) {
+        throwCustomError({
+          message: "Invalid user!",
+          status: HttpStatusCode.UNAUTHORIZED,
+        });
+      }
       log.info(`updating a user with id: ${req.body}`);
-      const user = await User.create(req.body);
+      const user = await User.updateById(
+        req.params.id,
+        {
+          $set: {
+            name: req.body.name,
+            email: req.body.email,
+            // fix password update
+            // password: await Password.hash(req.body.password),
+            "details.picture": req.body.picture,
+          },
+        },
+        "-password"
+      );
       return super.jsonRes(user, res);
     } catch (error) {
       return next(error);

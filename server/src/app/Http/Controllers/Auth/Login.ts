@@ -33,6 +33,7 @@ export class LoginController extends Controller {
       return super.jsonRes(
         {
           user: {
+            id: user._id,
             email: user.email,
             name: user.name,
           },
@@ -163,7 +164,12 @@ export class LoginController extends Controller {
       return super.jsonRes(
         {
           user: userData,
-          accessToken: access_token,
+          accessToken: Jwt.createAccessToken({
+            id: user._id,
+            email: user.email,
+            name: user.name,
+            role: user?.role,
+          }),
         },
         res
       );
