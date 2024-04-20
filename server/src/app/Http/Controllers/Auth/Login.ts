@@ -163,7 +163,11 @@ export class LoginController extends Controller {
 
       return super.jsonRes(
         {
-          user: userData,
+          user: {
+            id: user._id,
+            email: user.email,
+            name: user.name,
+          },
           accessToken: Jwt.createAccessToken({
             id: user._id,
             email: user.email,

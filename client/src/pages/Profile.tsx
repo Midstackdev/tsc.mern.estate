@@ -13,6 +13,7 @@ import {
   updateUserStart,
   updateUserSuccess,
 } from '../redux/user/userSlice';
+import { Link } from 'react-router-dom';
 
 type PageData = {
   picture?: string;
@@ -204,6 +205,12 @@ const Profile = () => {
         >
           {loading ? 'loading...' : 'Update'}
         </button>
+        <Link
+          to="/create-listing"
+          className="bg-green-700 text-white p-3 rounded-lg uppercase text-center hover:opacity-95"
+        >
+          create listing
+        </Link>
         {/* {progress > 0 && <p>Upload Progress: {progress}%</p>} */}
       </form>
       <div className="flex justify-between mt-5">
