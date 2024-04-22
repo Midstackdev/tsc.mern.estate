@@ -1,6 +1,99 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { AppError, InputChangeEventHandler } from '../types';
+
+type ImageUrl = { fileId: string; publicId: string; url: string };
+type PageData = {
+  imageUrls: ImageUrl[];
+};
 
 const CreateListing = () => {
+  const [files, setFiles] = useState<FileList | null>(null);
+  const [status, setStatus] = useState<
+    'initial' | 'uploading' | 'success' | 'fail'
+  >('initial');
+  const [pageData, setPageData] = useState<PageData>({ imageUrls: [] });
+  const [error, setError] = useState<AppError | null>(null);
+  const [uploading, setUploading] = useState<boolean>(false);
+
+  const handleSelectFiles = (e: InputChangeEventHandler) => {
+    setFiles(e.target.files);
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setPageData({
+      ...pageData,
+      imageUrls: pageData.imageUrls.filter((_, i) => i !== index),
+    });
+  };
+
+  const handleUploadFiles = async () => {
+    setUploading(true);
+    const criteria =
+      files !== null &&
+      files.length > 0 &&
+      files.length + pageData.imageUrls.length < 7;
+    if (!criteria) {
+      setError({
+        message: 'you can only upload 6 images per listing',
+        type: 'error',
+      });
+      return;
+    }
+    const promises = [];
+    for (const file of files) {
+      promises.push(sotreImage(file));
+    }
+    try {
+      const results = await Promise.all(promises);
+      console.log('----fff---', results);
+      setPageData({
+        ...pageData,
+        imageUrls: pageData.imageUrls.concat(results),
+      });
+      setUploading(false);
+    } catch (err) {
+      setError(err as AppError);
+      setUploading(false);
+      console.log(err);
+    }
+  };
+
+  const sotreImage = async (file: File): Promise<ImageUrl> => {
+    return new Promise((resolve, reject) => {
+      if (file) {
+        setStatus('uploading');
+
+        const formData = new FormData();
+        formData.append('file', file);
+        const fetchData = async () => {
+          const response = await fetch('/api/user/avatar', {
+            method: 'POST',
+            body: formData,
+            // work on progress later
+            // onUploadProgress: (progressEvent) => {
+            //   const percentCompleted = Math.round(
+            //     (progressEvent.loaded * 100) / progressEvent.total
+            //   );
+            //   setProgress(percentCompleted);
+            // },
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            setStatus('fail');
+            reject(data);
+          }
+
+          setStatus('success');
+          resolve(data);
+        };
+        fetchData();
+      }
+    });
+  };
+
+  console.log('--pg--', pageData);
+
   return (
     <main className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
@@ -116,19 +209,45 @@ const CreateListing = () => {
               id="images"
               accept="image/*"
               multiple
-              className="p-3 border border-gray-300 rounded w-full"
+              className="p-3 border border-gray-300 rounded w-full file:bg-violet-50 file:text-violet-500 hover:file:bg-violet-100: true,
+              file:rounded-lg file:rounded-tr-none file:rounded-br-none: true,
+              file:px-4 file:py-2 file:mr-4 file:border-none true,"
+              onChange={handleSelectFiles}
             />
             <button
               type="button"
               className="p-3 text-green-700 border border-green-700 rounded uppercase hover:shadow-lg disabled:opacity-80"
+              onClick={handleUploadFiles}
             >
-              Upload
+              {uploading ? 'Uploading...' : 'Upload'}
             </button>
           </div>
+          {error && <p className="text-red-500 text-sm">{error.message}</p>}
+          {pageData.imageUrls.length > 0 &&
+            pageData.imageUrls.map(({ url }, index) => (
+              <div
+                key={index}
+                className="flex justify-between p-3 border items-center"
+              >
+                <img
+                  src={url}
+                  alt=""
+                  className="w-20 h-20 object-contain rounded-lg"
+                />
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(index)}
+                  className="p-3 text-red-700 rounded-lg uppercase hover:opacity-75"
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
           <button className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
             Create Listing
           </button>
         </div>
+        {/* {error && <p className="text-red-500 mt-5">{error.message}</p>} */}
       </form>
     </main>
   );
