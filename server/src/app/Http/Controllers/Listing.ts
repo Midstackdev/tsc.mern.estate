@@ -20,8 +20,8 @@ export class ListingController extends Controller {
   public async store(req: Request, res: Response, next: NextFunction) {
     try {
       //validate fields
-      const listing = Listing.create(req.body);
-      super.jsonRes(listing, res);
+      const listing = await Listing.create(req.body);
+      return super.jsonRes(listing, res);
     } catch (error) {
       next(error);
     }

@@ -16,7 +16,7 @@ const email: VerificationController = new VerificationController();
 
 router.post("/register", register.SignUp);
 router.post("/login", login.SignIn);
-router.post("/logout", protect, logout.SignOut);
+router.post("/logout", logout.SignOut);
 router.post("/refresh", protect, logout.Refresh);
 router.get("/password/reset", password.sendResetLinkForm);
 router.post("/password/email", password.sendResetLinkEmail);
