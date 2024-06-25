@@ -35,19 +35,28 @@ const Navbar = () => {
               About
             </li>
           </Link>
-          <Link to={'/profile'}>
-            {currentUser ? (
-              <img
-                src={currentUser?.picture ?? './avatar.png'}
-                className="rounded-full h-7 w-7"
-                alt="profile"
-              />
-            ) : (
+          {currentUser ? (
+            <>
+              <Link to={'/user/listings'}>
+                <li className="hidden sm:inline text-slate-700 hover:cursor-pointer">
+                  My Listings
+                </li>
+              </Link>
+              <Link to={'/profile'}>
+                <img
+                  src={currentUser?.picture ?? '/avatar.png'}
+                  className="rounded-full h-7 w-7"
+                  alt="profile"
+                />
+              </Link>
+            </>
+          ) : (
+            <Link to={'/sigin-in'}>
               <li className="hidden sm:inline text-slate-700 hover:cursor-pointer">
                 SignIn
               </li>
-            )}
-          </Link>
+            </Link>
+          )}
         </ul>
       </div>
     </header>

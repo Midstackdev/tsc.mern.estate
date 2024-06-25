@@ -48,7 +48,7 @@ const userSlice = createSlice({
         ...state.currentUser,
         name: action.payload.name,
         email: action.payload.email,
-        picture: action.payload.details.picture,
+        picture: action.payload?.details?.picture,
         // token: action.payload.accessToken,
       };
       state.loading = false;

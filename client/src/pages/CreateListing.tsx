@@ -25,6 +25,8 @@ type PageData = {
   offer: boolean;
 };
 
+export type IListing = PageData & { _id: string; imageUrls: string[] };
+
 const INITIAL_STATE = {
   imageUrls: [],
   name: '',

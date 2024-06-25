@@ -21,7 +21,11 @@ type Action = {
   message?: string;
 };
 
-export const useFetch = (url: string, cached: boolean = false) => {
+export const useFetch = (
+  url: string,
+  options: object = {},
+  cached: boolean = false
+) => {
   const cache = useRef<Record<string, any>>({});
 
   const INITIAL_STATE: State = {
@@ -71,7 +75,7 @@ export const useFetch = (url: string, cached: boolean = false) => {
       }
 
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, { ...options });
         if (!response.ok) throw new Error(response.statusText);
         const json = await response.json();
         if (cached) cache.current[url] = json;

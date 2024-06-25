@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import PrivateRoute from './components/PrivateRoute';
 import CreateListing from './pages/CreateListing';
 import Listing from './pages/Listing';
+import Listings from './pages/Listings';
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-listing" element={<CreateListing />} />
+          <Route path="/user/listings" element={<Listings />} />
           <Route path="/listing/:id" element={<Listing />} />
         </Route>
         <Route path="/auth/:with/callback" element={<SignIn />} />
