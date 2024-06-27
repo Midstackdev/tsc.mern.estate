@@ -32,3 +32,9 @@ export type AppError = {
 };
 
 export type Password = string | Buffer | NodeJS.TypedArray | DataView;
+
+export type ImageUrl = {
+  fileId: string;
+  publicId: string;
+  url: string;
+};

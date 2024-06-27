@@ -1,7 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import Controller from "../../libs/routing/Controller";
 import { Listing } from "../../Models/Listing";
-import { throwNotFoundError } from "../../libs/utils/errors";
+import { throwCustomError, throwNotFoundError } from "../../libs/utils/errors";
+import { IListing, ListingDoc } from "../../DbSchema/listng";
+import { ImageUrl } from "../../types";
+import { cloudinary } from "../../Integrations/Storage/cloudinary";
 
 export class ListingController extends Controller {
   public constructor() {
@@ -39,6 +42,43 @@ export class ListingController extends Controller {
     } catch (error) {
       next(error);
     }
+  }
+
+  public async remove(req: Request, res: Response, next: NextFunction) {
+    try {
+      //validate fields
+      const listing: ListingDoc = await Listing.findById(req.params.id);
+      if (!listing) {
+        throwNotFoundError("Listing not found");
+      }
+
+      if (req.user.id !== listing.userRef) {
+        throwCustomError({ message: "Not Authorized", status: 401 });
+      }
+
+      await ListingController.deleteImages(listing);
+      await Listing.deleteById(req.params.id);
+      return super.jsonRes("listing deleted", res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  private static async deleteImages(listing: IListing) {
+    const getPublicId = listing.imageUrls.map((list: ImageUrl) => {
+      if (typeof list === "string") {
+        const url = new URL(list).pathname.split("/").pop();
+        const publicId = url?.split(".")[0];
+        return publicId;
+      }
+      return list.publicId;
+    });
+    console.log("its a string ", getPublicId);
+
+    getPublicId.map(async (id) => {
+      const result = await cloudinary.destroy(id as string);
+      console.log("deleted result", result);
+    });
   }
 }
 

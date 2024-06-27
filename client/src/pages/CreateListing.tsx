@@ -25,7 +25,10 @@ type PageData = {
   offer: boolean;
 };
 
-export type IListing = PageData & { _id: string; imageUrls: string[] };
+export type IListing = PageData & {
+  _id: string;
+  imageUrls: string[];
+};
 
 const INITIAL_STATE = {
   imageUrls: [],
@@ -162,7 +165,7 @@ const CreateListing = () => {
     }
     const formdata = {
       ...pageData,
-      imageUrls: pageData.imageUrls.map(({ url }) => url),
+      imageUrls: pageData.imageUrls,
       userRef: currentUser?.id,
     };
     try {

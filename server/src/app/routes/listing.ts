@@ -5,7 +5,8 @@ import { protect } from "../Http/Middleware/protected";
 const router = Router();
 
 router.get("/", controller.index);
-router.post("/", controller.store);
+router.post("/", protect, controller.store);
+router.delete("/:id", protect, controller.remove);
 router.get("/user/:id", protect, controller.userListings);
 
 export default router;

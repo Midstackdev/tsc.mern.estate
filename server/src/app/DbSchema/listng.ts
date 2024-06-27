@@ -17,7 +17,7 @@ export type IListing = {
   parking: boolean;
   type: string;
   offer: boolean;
-  imageUrls: string[];
+  imageUrls: [];
   userRef: string;
 };
 
