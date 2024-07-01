@@ -2,7 +2,7 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { IListing } from './CreateListing';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 const Listings = () => {
@@ -10,6 +10,7 @@ const Listings = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [listings, setListings] = useState<IListing[]>([]);
   const [isError, setIsError] = useState(false);
+  const navigate = useNavigate();
   // const options = {
   //   headers: {
   //     'Content-Type': 'application/json',
@@ -66,6 +67,10 @@ const Listings = () => {
       console.log(error);
     }
   };
+
+  const goToEdit = (id: string) => {
+    navigate(`/edit-listing/${id}`);
+  };
   // console.log('---d---', data);
   return (
     <div className="p-3">
@@ -101,7 +106,13 @@ const Listings = () => {
                 >
                   Delete
                 </button>
-                <button className="text-green-700 uppercase">Edit</button>
+                <button
+                  className="text-green-700 uppercase"
+                  onClick={() => goToEdit(listing._id)}
+                  type="button"
+                >
+                  Edit
+                </button>
               </div>
             </div>
           ))}

@@ -21,6 +21,19 @@ export class ListingController extends Controller {
     }
   }
 
+  public async show(req: Request, res: Response, next: NextFunction) {
+    try {
+      //validate admin
+      const listing: ListingDoc = await Listing.findById(req.params.id);
+      if (!listing) {
+        throwNotFoundError("Listing not found");
+      }
+      return super.jsonRes(listing, res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   public async store(req: Request, res: Response, next: NextFunction) {
     try {
       //validate fields
