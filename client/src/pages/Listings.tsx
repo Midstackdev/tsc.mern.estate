@@ -1,4 +1,3 @@
-// import { useFetch } from '../hooks';
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { IListing } from './CreateListing';
@@ -11,16 +10,6 @@ const Listings = () => {
   const [listings, setListings] = useState<IListing[]>([]);
   const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
-  // const options = {
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     Authorization: `Bearer ${currentUser?.token}`,
-  //   },
-  // };
-  // const { data: listings, isLoading } = useFetch(
-  //   `/api/listing/user/${currentUser?.id}`,
-  //   options
-  // );
 
   useEffect(() => {
     const getListings = async () => {
