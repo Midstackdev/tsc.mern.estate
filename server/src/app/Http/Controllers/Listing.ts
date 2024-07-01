@@ -64,6 +64,35 @@ export class ListingController extends Controller {
     }
   }
 
+  public async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      //validate fields
+      const listing: ListingDoc = await Listing.findById(req.params.id);
+      if (!listing) {
+        throwNotFoundError("Listing not found");
+      }
+
+      if (req.user.id !== listing.userRef) {
+        throwCustomError({ message: "Not Authorized", status: 401 });
+      }
+
+      const updatedDoc = await Listing.updateById(req.params.id, req.body);
+      return super.jsonRes(updatedDoc, res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async removeImage(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await cloudinary.destroy(req.params.id);
+      console.log("deleted result", result);
+      return super.jsonRes("image deleted", res);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   private static async deleteImages(listing: IListing) {
     const getPublicId = listing.imageUrls.map((list: ImageUrl) => {
       if (typeof list === "string") {

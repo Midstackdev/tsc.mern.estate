@@ -61,11 +61,23 @@ const CreateListing = () => {
     setFiles(e.target.files);
   };
 
-  const handleRemoveImage = (index: number) => {
-    setPageData({
-      ...pageData,
-      imageUrls: pageData.imageUrls.filter((_, i) => i !== index),
-    });
+  const handleRemoveImage = async (index: number) => {
+    try {
+      const imageId = pageData.imageUrls.find((_, i) => i === index)?.publicId;
+      await fetch(`/api/listing/image/${imageId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${currentUser?.token}`,
+        },
+      });
+      setPageData({
+        ...pageData,
+        imageUrls: pageData.imageUrls.filter((_, i) => i !== index),
+      });
+    } catch (error) {
+      console.log('error from removing image ' + error);
+    }
   };
 
   const handleUploadFiles = async () => {
