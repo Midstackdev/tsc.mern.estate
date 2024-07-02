@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { AppError } from '../../types';
 
-type User = {
+export type User = {
   id?: string;
   name: string;
   email: string;

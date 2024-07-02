@@ -8,6 +8,7 @@ import {
 import { useSelector } from 'react-redux';
 import { RootState } from '../redux/store';
 import { useNavigate } from 'react-router-dom';
+import { User } from '../redux/user/userSlice';
 
 type ImageUrl = { fileId: string; publicId: string; url: string };
 type PageData = {
@@ -25,9 +26,11 @@ type PageData = {
   offer: boolean;
 };
 
+type IUser = Pick<User, 'email' | 'name'> & { _id: string };
 export type IListing = PageData & {
   _id: string;
   imageUrls: string[];
+  userRef?: IUser;
 };
 
 const INITIAL_STATE = {

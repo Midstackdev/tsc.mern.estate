@@ -9,6 +9,10 @@ import {
   ParkIcon,
 } from '../assets/icons';
 import { IListing } from './CreateListing';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { useState } from 'react';
+import Contact from '../components/Contact';
 
 const Listing = () => {
   const params = useParams();
@@ -21,6 +25,8 @@ const Listing = () => {
   const { data, isLoading } = useFetch(`/api/listing/${lisitingId}`, options);
 
   const listing: IListing = data;
+  const { currentUser } = useSelector((state: RootState) => state.user);
+  const [contact, setContact] = useState(false);
 
   return (
     <main>
@@ -80,6 +86,17 @@ const Listing = () => {
                 {listing.furnished ? ` Furnished` : ` UnFurnished`}
               </li>
             </ul>
+            {currentUser &&
+              listing.userRef?._id !== currentUser.id &&
+              !contact && (
+                <button
+                  onClick={() => setContact(true)}
+                  className="bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 p-3"
+                >
+                  Contact landlord
+                </button>
+              )}
+            {contact && <Contact listing={listing} />}
           </div>
         </main>
       )}

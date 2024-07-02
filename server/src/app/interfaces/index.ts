@@ -9,6 +9,7 @@ export interface IPopulate {
   path: string;
   model?: string;
   populate?: IPopulate;
+  select?: string;
 }
 
 export interface JwtPayload {

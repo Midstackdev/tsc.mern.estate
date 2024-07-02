@@ -24,7 +24,11 @@ export class ListingController extends Controller {
   public async show(req: Request, res: Response, next: NextFunction) {
     try {
       //validate admin
-      const listing: ListingDoc = await Listing.findById(req.params.id);
+      const listing: ListingDoc = await Listing.findById(req.params.id, {
+        path: "userRef",
+        model: "User",
+        select: "_id email name",
+      });
       if (!listing) {
         throwNotFoundError("Listing not found");
       }
