@@ -13,6 +13,13 @@ export class ListingModel extends BaseModel {
   constructor() {
     super(ListingSchema);
   }
+
+  all({ query, sort, skip, limit }: Record<string, any>) {
+    return ListingSchema.find({ ...query })
+      .sort(sort)
+      .skip(skip)
+      .limit(limit);
+  }
 }
 
 export const Listing = new ListingModel();

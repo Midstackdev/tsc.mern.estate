@@ -13,8 +13,59 @@ export class ListingController extends Controller {
 
   public async index(req: Request, res: Response, next: NextFunction) {
     try {
-      //validate admin
-      const listings = await Listing.findMany({});
+      const limit = parseInt(req.query.limit as string) || 10;
+      const skip = parseInt(req.query.start as string) || 0;
+      const search = req.query.term || "";
+      const sort = (req.query.sort as string) || "createdAt";
+      const order = req.query.order || "desc";
+
+      let offer = req.query.offer;
+      if (offer === undefined || offer === "false") {
+        //@ts-ignore
+        offer = {
+          $in: [false, true],
+        };
+      }
+
+      let furnished = req.query.furnished;
+      if (furnished === undefined || furnished === "false") {
+        //@ts-ignore
+        furnished = {
+          $in: [false, true],
+        };
+      }
+
+      let parking = req.query.parking;
+      if (parking === undefined || parking === "false") {
+        //@ts-ignore
+        parking = {
+          $in: [false, true],
+        };
+      }
+
+      let type = req.query.type;
+      if (type === undefined || type === "all") {
+        type = {
+          $in: ["sale", "rent"],
+        };
+      }
+
+      const query = {
+        name: { $regex: search, $options: "i" },
+        offer,
+        furnished,
+        parking,
+        type,
+      };
+
+      // console.log("---qee---", query);
+
+      const listings = await Listing.all({
+        query,
+        sort: { [sort]: order },
+        limit,
+        skip,
+      });
       return super.jsonRes(listings, res);
     } catch (error) {
       next(error);
