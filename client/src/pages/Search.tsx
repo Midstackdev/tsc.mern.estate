@@ -7,6 +7,7 @@ import {
 import { queryString } from '../helpers/url';
 import { useNavigate } from 'react-router-dom';
 import { IListing } from './CreateListing';
+import ListCard from '../components/ListCard';
 
 const Search = () => {
   const [searchQuery, setSearchQuery] = useState({
@@ -203,10 +204,25 @@ const Search = () => {
           </button>
         </form>
       </div>
-      <div className="">
+      <div className="flex-1">
         <h1 className="text-3xl font-semibold border-b p-3 text-slate-700 mt-5">
           Search Results:
         </h1>
+        <div className="p-7 flex flex-wrap gap-4">
+          {isLoading && !isError && (
+            <p className="text-xl text-slate-700 text-center w-full">
+              Loading...
+            </p>
+          )}
+          {!isLoading && listings.length === 0 && (
+            <p className="text-xl text-slate-700">No listing found</p>
+          )}
+          {!isLoading &&
+            listings &&
+            listings.map((list: IListing) => (
+              <ListCard key={list._id} listing={list} />
+            ))}
+        </div>
       </div>
     </div>
   );
