@@ -1,12 +1,11 @@
 import { useState } from 'react';
-import { IListing } from '../pages/CreateListing';
 
+type ImageUrl = { fileId: string; publicId: string; url: string };
 type Props = {
-  listing: IListing;
+  images: ImageUrl[] & string[];
 };
 
-const Slider = ({ listing }: Props) => {
-  const images = listing.imageUrls;
+const Slider = ({ images }: Props) => {
   const [imageIndex, setImageIndex] = useState(0);
 
   const slide = (direction: string) => {

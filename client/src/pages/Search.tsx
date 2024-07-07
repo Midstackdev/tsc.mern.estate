@@ -23,6 +23,7 @@ const Search = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [listings, setListings] = useState<IListing[]>([]);
   const [isError, setIsError] = useState(false);
+  // const [showMore, setShowMore] = useState(true);
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -96,8 +97,6 @@ const Search = () => {
     e.preventDefault();
     navigate(`/search?${queryString(searchQuery)}`);
   };
-
-  console.log(listings);
 
   return (
     <div className="flex flex-col md:flex-row">
@@ -223,6 +222,11 @@ const Search = () => {
               <ListCard key={list._id} listing={list} />
             ))}
         </div>
+        {/* {showMore && (
+          <button className="text-green-700 hover:underline text-center w-full">
+            Show More
+          </button>
+        )} */}
       </div>
     </div>
   );

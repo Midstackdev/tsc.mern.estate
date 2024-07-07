@@ -1,4 +1,3 @@
-import React from 'react';
 import { IListing } from '../pages/CreateListing';
 import { Link } from 'react-router-dom';
 import { LocationIcon } from '../assets/icons';

@@ -13,7 +13,7 @@ export class ListingController extends Controller {
 
   public async index(req: Request, res: Response, next: NextFunction) {
     try {
-      const limit = parseInt(req.query.limit as string) || 10;
+      const limit = parseInt(req.query.limit as string) || 6;
       const skip = parseInt(req.query.start as string) || 0;
       const search = req.query.term || "";
       const sort = (req.query.sort as string) || "createdAt";
